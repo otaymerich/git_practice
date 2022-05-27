@@ -251,6 +251,68 @@ strings data.txt | grep "===" | while read line; do echo $line; done #lista toda
 contador=1; strings data.txt | grep "===" | while read line; do echo "Linea $contador: $line"; let contador+=1; done #lista todas las lineas que contengan === con numero de linea delante 
 ```
 
+###Codificar i descodificar segun base
+```bash
+echo "Hola que tal" | base64 #codifica texto a base64, para descodificar
+| base64 -d #-d corresponde a descodificar
+base64 -d data.txt | tr ' ' '\n' #descodificamos dat.txt y substituimos todos los espacios por salto de linea con tr
+base64 -d data.txt | sed 's/ /\n/g' #exactamente lo mismo que la linea anterior pero usando sed 's/.....' ponemos la g al final para que se aplique a todos los espacios que hayan no sola al primero
+| xxd #para convertir a hexadecimal
+| xxd -r #descodificar de hexadecimal
+```
+
+###Rotar letras para descodificar
+Ejempol, texto donde todas las letras del texto han sido rotadas 13 posiciones dentro del abecedario.
+```bash
+cat data.txt | tr '[G-ZA-Fg-za-f]' '[T-ZA-St-za-s]' #La diferencia de posicion entre G i T en el abecedario es 13
+cat data.txt | tr '[A-Za-z]' '[N-ZA-Mn-za-m]' #exactamente lo mismo que arriba
+```
+
+###Descomprimir archivos
+```bash
+7z <file_name> #comando para descomprimir universal
+7z l <file_name> #lista contenido que se descomprime cuando se descomprime file_name, se puede ver el nombre del archivo que vamos a descomprimir
+7z x <file_name> #extraemos el fichero de dentro el archivo comprimido
+7z l <file_name> | grep "<text>" -A 2 #devuelve las dos linias siguientes luego de encontrar text cuando leemos la informacion del archivo a descomprimir
+7z l <file_name> | grep "<text>" -B 2 #devuelve las dos linias por encima luego de encontrar text cuando leemos la informacion del archivo a descomprimir
+7z l <file_name> | grep "<text>" -C 2 #devuelve las dos linias por arriba y por abajo luego de encontrar text cuando leemos la informacion del archivo a descomprimir
+```
+
+####Script en bash
+Cuando abrimos un archivo con nano y queremos hacer un script con bash hay que inicializar el fichero con:
+```bash
+#!/bin/bash
+```
+Ejemplo fichero:
+```bash
+#!/bin/bash
+
+name_compressed=$(7z l content.gzip | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF>
+
+7z x content.gzip > /dev/null 2>&1
+```
+Ejemplo 2:
+```bash
+#!/bin/bash
+
+name_decompressed=$(7z l content.gzip | grep "Name" -A 2 | tail -n 1 | awk 'NF{print $NF}')
+7z x content.gzip > /dev/null 2>&1
+
+while true; do
+        7z l $name_decompressed > /dev/null 2>&1
+
+        if [ "$(echo $?)" == "0" ]; then
+                decompressed_next=$(7z l $name_compressed | grep "Name" -A 2 | tail -n 1 | aw>
+                7z x $name_compressed > /dev/null 2>&1 && name_compressed=$decompressed_next
+        else
+                exit 1
+        fi
+done
+```
+En este archivo creamos un bucle donde descomprimimos recurrentemente un archivo comprimido hasta encontar el archivo final sin comprimir. Mediante 7z l buscamos el nombre del archivo dentro del comprimido, es decir el nombre del archivo resultado de descomprimir el fichero comprimido. Una vez encontrado lo extraemos e iniciamos el bucle. Para ver si el archivo resultante es también un comprimido volvemos a usar 7z l y miramos el mensaje de estado de realizar dicha operacion. El mensaje de estado se vee mediante echo $!, si el resultante es 0 es que la operacion anterior, en este caso 7z l, se ha realizado correctamente, por el contario, si devuelve un 1 o 2 significa que ha aparecido un error. En caso de realizar la operaicon 7z l a un fichero no comprimido nos aparece un error ya que es una operacion de descompresion, por tanto, mientras 7z l vaya dando echo $? 0 significa que el archivo resultatnte es tambien un archivo comprimido. cunado el resultado sea diferente de 0 hacemos un exit.
+
+
+
 ###Otros
 Pagina para practicar comandos de terminal:
 https://overthewire.org/wargames/bandit/bandit0.htmlc
