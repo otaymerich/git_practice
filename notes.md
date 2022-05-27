@@ -148,7 +148,7 @@ ls -l #muestra los permisos para cada archivo
 lsattr #muestra permisos especiales
 ```
 
-###Permisos
+### Permisos
 Los permisos son grupos de tres variables para grupo, users y others. Marcan quien puede leer, escribir y ejecutar cada archivo. Se vee como rwx rwx rwx, si se ve la letra significa que el usuario o gurpo tiene el privilegio, si no tiene se vee un -
 Los privilegios se pueden convertir a decimal, ejemplo
 Privilegio rw-r---w-
@@ -235,7 +235,7 @@ touch data.txt
 nono !$ #abre data.txt
 ```
 
-###Bucles en bash
+### Bucles en bash
 '''bash
 contador=1 #no se pueden dejar espacios
 while read line; do #bucle bash
@@ -251,7 +251,7 @@ strings data.txt | grep "===" | while read line; do echo $line; done #lista toda
 contador=1; strings data.txt | grep "===" | while read line; do echo "Linea $contador: $line"; let contador+=1; done #lista todas las lineas que contengan === con numero de linea delante 
 ```
 
-###Codificar i descodificar segun base
+### Codificar i descodificar segun base
 ```bash
 echo "Hola que tal" | base64 #codifica texto a base64, para descodificar
 | base64 -d #-d corresponde a descodificar
@@ -261,14 +261,14 @@ base64 -d data.txt | sed 's/ /\n/g' #exactamente lo mismo que la linea anterior 
 | xxd -r #descodificar de hexadecimal
 ```
 
-###Rotar letras para descodificar
+### Rotar letras para descodificar
 Ejempol, texto donde todas las letras del texto han sido rotadas 13 posiciones dentro del abecedario.
 ```bash
 cat data.txt | tr '[G-ZA-Fg-za-f]' '[T-ZA-St-za-s]' #La diferencia de posicion entre G i T en el abecedario es 13
 cat data.txt | tr '[A-Za-z]' '[N-ZA-Mn-za-m]' #exactamente lo mismo que arriba
 ```
 
-###Descomprimir archivos
+### Descomprimir archivos
 ```bash
 7z <file_name> #comando para descomprimir universal
 7z l <file_name> #lista contenido que se descomprime cuando se descomprime file_name, se puede ver el nombre del archivo que vamos a descomprimir
@@ -278,7 +278,7 @@ cat data.txt | tr '[A-Za-z]' '[N-ZA-Mn-za-m]' #exactamente lo mismo que arriba
 7z l <file_name> | grep "<text>" -C 2 #devuelve las dos linias por arriba y por abajo luego de encontrar text cuando leemos la informacion del archivo a descomprimir
 ```
 
-####Script en bash
+#### Script en bash
 Cuando abrimos un archivo con nano y queremos hacer un script con bash hay que inicializar el fichero con:
 ```bash
 #!/bin/bash
@@ -313,7 +313,7 @@ En este archivo creamos un bucle donde descomprimimos recurrentemente un archivo
 
 
 
-###Otros
+### Otros
 Pagina para practicar comandos de terminal:
 https://overthewire.org/wargames/bandit/bandit0.htmlc
 Video para  scriptin:
