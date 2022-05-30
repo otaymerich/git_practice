@@ -1,4 +1,5 @@
 ## Comandos terminal:
+print("Hola")
 
 1. ls: lista los ficheros en el wd
 ```bash
