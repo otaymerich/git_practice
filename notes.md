@@ -1,4 +1,4 @@
-### Comandos terminal:
+## Comandos terminal:
 
 1. ls: lista los ficheros en el wd
 ```bash
